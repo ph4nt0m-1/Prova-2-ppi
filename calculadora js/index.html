@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="stylesheet"
+    />
+    <title>Calculator</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="text-align: center">Calculator</h1>
+      <div class="alert alert-primary">Perform basic operations: +, -, *, /</div>
+      <input class="form-control" id="expression" placeholder="Enter expression (ex: 5+3)" />
+      <button class="btn btn-primary btn-block mb-3 mt-3" id="calculateButton">
+        Calculate
+      </button>
+      <div class="alert alert-success">
+        Result: <span id="resultTextArea"></span>
+      </div>
+    </div>
+
+    <script>
+      const userInput = document.getElementById("expression");
+      const calculateButton = document.getElementById("calculateButton");
+      const resultTextArea = document.getElementById("resultTextArea");
+
+      calculateButton.addEventListener("click", function () {
+        const expression = userInput.value.trim();
+
+        if (/^[-+*/.\d\s]+$/.test(expression)) {
+          try {
+            const result = eval(expression);
+            resultTextArea.innerText = result;
+          } catch (error) {
+            resultTextArea.innerText = "Invalid expression";
+          }
+        } else {
+          resultTextArea.innerText = "Invalid input. Use numbers and +, -, *, / only.";
+        }
+      });
+    </script>
+  </body>
+</html>
