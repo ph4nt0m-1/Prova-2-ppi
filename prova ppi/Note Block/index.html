@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloco de Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Bloco de Notas</h1>
+        <div class="mb-3">
+            <input type="text" id="note-title" class="form-control" placeholder="Título da Nota">
+        </div>
+        <div class="mb-3">
+            <textarea id="note-content" class="form-control" rows="5" placeholder="Escreva sua nota..."></textarea>
+        </div>
+        <button id="save-note" class="btn btn-primary">Salvar Nota</button>
+        <button id="new-note" class="btn btn-secondary">Nova Nota</button>
+        <ul id="notes-list" class="list-group mt-4"></ul>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const notesContainer = document.getElementById("notes-list");
+            const noteTitle = document.getElementById("note-title");
+            const noteContent = document.getElementById("note-content");
+            const saveButton = document.getElementById("save-note");
+            const newNoteButton = document.getElementById("new-note");
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+            let currentNoteIndex = null;
+    
+            function renderNotes() {
+                notesContainer.innerHTML = "";
+                notes.forEach((note, index) => {
+                    const noteItem = document.createElement("li");
+                    noteItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+                    noteItem.textContent = note.title;
+                    noteItem.onclick = () => loadNote(index);
+                    
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "×";
+                    deleteButton.classList.add("btn", "btn-danger", "btn-sm");
+                    deleteButton.onclick = (event) => {
+                        event.stopPropagation();
+                        deleteNote(index);
+                    };
+                    
+                    noteItem.appendChild(deleteButton);
+                    notesContainer.appendChild(noteItem);
+                });
+            }
+    
+            function loadNote(index) {
+                currentNoteIndex = index;
+                noteTitle.value = notes[index].title;
+                noteContent.value = notes[index].content;
+            }
+    
+            function saveNote() {
+                const title = noteTitle.value.trim();
+                const content = noteContent.value.trim();
+                if (title === "" || content === "") return;
+    
+                if (currentNoteIndex === null) {
+                    notes.push({ title, content });
+                } else {
+                    notes[currentNoteIndex] = { title, content };
+                }
+    
+                localStorage.setItem("notes", JSON.stringify(notes));
+                renderNotes();
+                clearForm();
+            }
+    
+            function deleteNote(index) {
+                if (confirm("Tem certeza que deseja excluir esta nota?")) {
+                    notes.splice(index, 1);
+                    localStorage.setItem("notes", JSON.stringify(notes));
+                    renderNotes();
+                    clearForm();
+                }
+            }
+    
+            function clearForm() {
+                noteTitle.value = "";
+                noteContent.value = "";
+                currentNoteIndex = null;
+            }
+    
+            saveButton.addEventListener("click", saveNote);
+            newNoteButton.addEventListener("click", clearForm);
+            renderNotes();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

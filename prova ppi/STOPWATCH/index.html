@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/edec7f25e3.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+</head>
+<body>
+    <div class="container col-lg-4 bg-primary mt-5 rounded text-center py-3">
+        <h1 class="text-white">Stopwatch</h1>
+        <div class="container rounded-circle bg-white d-flex justify-content-center align-items-center mt-5" style="width: 200px; height: 200px; position: relative;">
+            <span class="display-4 d-none" id="hours">0</span>
+            <span class="display-4 d-none" id="mins">0</span>
+            <span class="display-4" id="secs">0</span>
+            <span id="ms">00</span>
+        </div>
+        <div class="buttons my-5">
+            <button class="btn btn-light" id="reset-btn"><i class="fas fa-undo fa-lg"></i></button>
+            <button class="btn btn-light" id="startPause-btn"><i class="fas fa-play fa-lg"></i></button>
+            <button class="btn btn-light" id="timeStamp-btn"><i class="fas fa-stopwatch fa-lg"></i></button>
+        </div>
+        <table class="table table-dark mx-auto d-none" id="table">
+            <thead>
+                <tr>
+                    <th>Count</th>
+                    <th>Time Stamp</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+    <script>
+
+        const resetBtn = document.getElementById('reset-btn');
+        const startPauseBtn = document.getElementById('startPause-btn');
+        const timeStampBtn = document.getElementById('timeStamp-btn');
+        const hours = document.getElementById('hours');
+        const mins = document.getElementById('mins');
+        const secs = document.getElementById('secs');
+        const ms = document.getElementById('ms');
+        let countNo = 1;
+        let startTime = null;
+        let elapsedTime = 0;
+        let timerInterval = null;
+
+        function startTimer() {
+            if (startPauseBtn.firstElementChild.classList.contains('fa-play')) {
+                startTime = new Date() - elapsedTime;
+                timerInterval = setInterval(updateTimer, 10);
+                startPauseBtn.firstElementChild.classList.replace('fa-play', 'fa-pause');
+            } else {
+                clearInterval(timerInterval);
+                elapsedTime = new Date() - startTime;
+                startPauseBtn.firstElementChild.classList.replace('fa-pause', 'fa-play');
+
+                getTimeStamp();
+            }
+        }
+
+        function updateTimer() {
+            let now = new Date();
+            let timeDiff = now - startTime;
+
+            let mss = Math.floor((timeDiff % 1000) / 10);
+            let s = Math.floor((timeDiff / 1000) % 60);
+            let m = Math.floor((timeDiff / 60000) % 60);
+            let h = Math.floor(timeDiff / 3600000);
+
+            hours.textContent = h > 0 ? `${h}:` : '';
+            mins.textContent = m > 0 ? `${m}:` : '';
+            secs.textContent = s.toString().padStart(2, '0');
+            ms.textContent = mss.toString().padStart(2, '0');
+        }
+
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            startTime = null;
+            elapsedTime = 0;
+    
+            hours.textContent = '';
+            mins.textContent = '';
+            secs.textContent = '00';
+            ms.textContent = '00';
+
+            startPauseBtn.firstElementChild.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('table').classList.add('d-none');
+            document.getElementById('table-body').innerHTML = '';
+            countNo = 1;
+        }
+
+        function getTimeStamp() {
+            if (!startTime) return;
+
+            let now = new Date();
+            let timeDiff = now - startTime;
+
+            let mss = Math.floor((timeDiff % 1000) / 10);
+            let s = Math.floor((timeDiff / 1000) % 60);
+            let m = Math.floor((timeDiff / 60000) % 60);
+            let h = Math.floor(timeDiff / 3600000);
+
+            let formattedTime = 
+                (h > 0 ? `${h}:` : '') + 
+                (m > 0 ? `${String(m).padStart(2, '0')}:` : '') + 
+            `${String(s).padStart(2, '0')}.${String(mss).padStart(2, '0')}`;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${countNo++}</td><td>${formattedTime}</td>`;
+            document.getElementById('table-body').appendChild(row);
+
+            document.getElementById('table').classList.remove('d-none');
+        }
+
+        document.addEventListener('keydown', function(event) {
+             if (event.code === 'Space') { 
+               event.preventDefault();
+                startTimer();
+            } else if (event.key.toLowerCase() === 'r') { 
+                resetTimer();
+            }
+        });
+
+
+
+        startPauseBtn.addEventListener('click', startTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        timeStampBtn.addEventListener('click', getTimeStamp);
+    </script>
+</body>
+</html>
