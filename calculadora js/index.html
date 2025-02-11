@@ -1,48 +1,112 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="stylesheet"
+    <link 
+        rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
+        crossorigin="anonymous"
     />
     <title>Calculator</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1 style="text-align: center">Calculator</h1>
-      <div class="alert alert-primary">Perform basic operations: +, -, *, /</div>
-      <input class="form-control" id="expression" placeholder="Enter expression (ex: 5+3)" />
-      <button class="btn btn-primary btn-block mb-3 mt-3" id="calculateButton">
-        Calculate
-      </button>
-      <div class="alert alert-success">
-        Result: <span id="resultTextArea"></span>
-      </div>
+    <style>
+        .calculator {
+            width: 300px;
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin: auto;
+            margin-top: 50px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .display {
+            text-align: right;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #222;
+            border-radius: 5px;
+        }
+        .btn-custom {
+            width: 65px;
+            height: 65px;
+            font-size: 1.5rem;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .btn-result {
+            background-color: #ff4d4d;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+
+        <div class="container">
+            <div class="row">
+                <button class="btn btn-secondary btn-custom col" onclick="limparDisplay()">AC</button>
+                <button class="btn btn-secondary btn-custom col" onclick="deleteUlt()">DEL</button>
+                <button class="btn btn-secondary btn-custom col" onclick="Characterbtn('/')">/</button>
+                <button class="btn btn-secondary btn-custom col" onclick="Characterbtn('*')">×</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('7')">7</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('8')">8</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('9')">9</button>
+                <button class="btn btn-secondary btn-custom col" onclick="Characterbtn('-')">-</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('6')">6</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('5')">5</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('4')">4</button>
+                <button class="btn btn-secondary btn-custom col" onclick="Characterbtn('+')">+</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('1')">1</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('2')">2</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('3')">3</button>
+                <button class="btn btn-result btn-custom col" onclick="calculaResult()">=</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-dark btn-custom col-6" onclick="Characterbtn('0')">0</button>
+                <button class="btn btn-dark btn-custom col" onclick="Characterbtn('.')">.</button>
+            </div>
+        </div>
     </div>
 
     <script>
-      const userInput = document.getElementById("expression");
-      const calculateButton = document.getElementById("calculateButton");
-      const resultTextArea = document.getElementById("resultTextArea");
+        let display = document.getElementById("display");
 
-      calculateButton.addEventListener("click", function () {
-        const expression = userInput.value.trim();
-
-        if (/^[-+*/.\d\s]+$/.test(expression)) {
-          try {
-            const result = eval(expression);
-            resultTextArea.innerText = result;
-          } catch (error) {
-            resultTextArea.innerText = "Invalid expression";
-          }
-        } else {
-          resultTextArea.innerText = "Invalid input. Use numbers and +, -, *, / only.";
+        function Characterbtn(char) {
+            if (display.innerText === "0" && char !== ".") {
+                display.innerText = char;
+            } else {
+                display.innerText += char;
+            }
         }
-      });
+
+        function limparDisplay() {
+            display.innerText = "0";
+        }
+
+        function deleteUlt() {
+            display.innerText = display.innerText.slice(0, -1);
+            if (display.innerText === "") {
+                display.innerText = "0";
+            }
+        }
+
+        function calculaResult() {
+            try {
+                display.innerText = eval(display.innerText);
+            } catch {
+                display.innerText = "Error";
+            }
+        }
     </script>
-  </body>
+</body>
 </html>

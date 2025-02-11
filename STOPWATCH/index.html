@@ -12,7 +12,6 @@
     <div class="container col-lg-4 bg-primary mt-5 rounded text-center py-3">
         <h1 class="text-white">Stopwatch</h1>
         <div class="container rounded-circle bg-white d-flex justify-content-center align-items-center mt-5" style="width: 200px; height: 200px; position: relative;">
-            <div id="spinner-container" style="width: 250px; height: 250px; position: absolute;"></div>
             <span class="display-4 d-none" id="hours">0</span>
             <span class="display-4 d-none" id="mins">0</span>
             <span class="display-4" id="secs">0</span>
@@ -34,14 +33,6 @@
         </table>
     </div>
     <script>
-        let spinnerContainer = document.getElementById('spinner-container');
-        let spinnerAnimation = bodymovin.loadAnimation({
-            container: spinnerContainer,
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            animationData: {"nm":"Spinner","ddd":0,"h":210,"w":210,"layers":[{"ty":4,"nm":"spinner","ks":{"a":{"k":[160,284,0]},"s":{"k":[271.16,271.16,100]},"p":{"k":[105,105,0]},"o":{"k":100}},"shapes":[{"ty":"gr","it":[{"ty":"sh","ks":{"k":{"v":[[36,0],[0,-36],[-36,0],[0,36]]}}},{"ty":"st","o":{"k":100},"w":{"k":7},"c":{"k":[0.1843,0.1882,0.1922]}}]}]}]}
-        });
 
         const resetBtn = document.getElementById('reset-btn');
         const startPauseBtn = document.getElementById('startPause-btn');
@@ -50,46 +41,90 @@
         const mins = document.getElementById('mins');
         const secs = document.getElementById('secs');
         const ms = document.getElementById('ms');
-        let h = 0, m = 0, s = 0, mss = 0;
-        let hourRate, minsRate, secsRate, msRate, tableTimeRate;
         let countNo = 1;
+        let startTime = null;
+        let elapsedTime = 0;
+        let timerInterval = null;
 
         function startTimer() {
             if (startPauseBtn.firstElementChild.classList.contains('fa-play')) {
-                updateMs(); updateSecs(); updateMins(); updateHours();
+                startTime = new Date() - elapsedTime;
+                timerInterval = setInterval(updateTimer, 10);
                 startPauseBtn.firstElementChild.classList.replace('fa-play', 'fa-pause');
-                spinnerContainer.classList.remove('d-none');
             } else {
-                clearInterval(hourRate); clearInterval(minsRate); clearInterval(secsRate); clearInterval(msRate);
+                clearInterval(timerInterval);
+                elapsedTime = new Date() - startTime;
                 startPauseBtn.firstElementChild.classList.replace('fa-pause', 'fa-play');
-                spinnerContainer.classList.add('d-none');
 
                 getTimeStamp();
             }
         }
 
+        function updateTimer() {
+            let now = new Date();
+            let timeDiff = now - startTime;
+
+            let mss = Math.floor((timeDiff % 1000) / 10);
+            let s = Math.floor((timeDiff / 1000) % 60);
+            let m = Math.floor((timeDiff / 60000) % 60);
+            let h = Math.floor(timeDiff / 3600000);
+
+            hours.textContent = h > 0 ? `${h}:` : '';
+            mins.textContent = m > 0 ? `${m}:` : '';
+            secs.textContent = s.toString().padStart(2, '0');
+            ms.textContent = mss.toString().padStart(2, '0');
+        }
+
+
         function resetTimer() {
-            clearInterval(hourRate); clearInterval(minsRate); clearInterval(secsRate); clearInterval(msRate);
-            hours.textContent = ''; mins.textContent = ''; secs.textContent = '00'; ms.textContent = '00';
-            document.getElementById('table').classList.add('d-none');
+            clearInterval(timerInterval);
+            startTime = null;
+            elapsedTime = 0;
+    
+            hours.textContent = '';
+            mins.textContent = '';
+            secs.textContent = '00';
+            ms.textContent = '00';
+
             startPauseBtn.firstElementChild.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('table').classList.add('d-none');
             document.getElementById('table-body').innerHTML = '';
             countNo = 1;
-            spinnerContainer.classList.add('d-none');
         }
-
-        function updateMs() { msRate = setInterval(() => { ms.textContent = (++mss % 90).toString().padStart(2, '0'); }, 10); }
-        function updateSecs() { secsRate = setInterval(() => { secs.textContent = (++s % 60).toString().padStart(2, '0'); }, 1000); }
-        function updateMins() { minsRate = setInterval(() => { mins.classList.remove('d-none'); mins.textContent = `${++m % 60}:`; }, 60000); }
-        function updateHours() { hourRate = setInterval(() => { hours.classList.remove('d-none'); hours.textContent = `${++h}:`; }, 3600000); }
 
         function getTimeStamp() {
-            clearInterval(tableTimeRate);
+            if (!startTime) return;
+
+            let now = new Date();
+            let timeDiff = now - startTime;
+
+            let mss = Math.floor((timeDiff % 1000) / 10);
+            let s = Math.floor((timeDiff / 1000) % 60);
+            let m = Math.floor((timeDiff / 60000) % 60);
+            let h = Math.floor(timeDiff / 3600000);
+
+            let formattedTime = 
+                (h > 0 ? `${h}:` : '') + 
+                (m > 0 ? `${String(m).padStart(2, '0')}:` : '') + 
+            `${String(s).padStart(2, '0')}.${String(mss).padStart(2, '0')}`;
+
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${countNo++}</td><td>${h}:${m}:${s}:${mss}</td>`;
+            row.innerHTML = `<td>${countNo++}</td><td>${formattedTime}</td>`;
             document.getElementById('table-body').appendChild(row);
+
             document.getElementById('table').classList.remove('d-none');
         }
+
+        document.addEventListener('keydown', function(event) {
+             if (event.code === 'Space') { 
+               event.preventDefault();
+                startTimer();
+            } else if (event.key.toLowerCase() === 'r') { 
+                resetTimer();
+            }
+        });
+
+
 
         startPauseBtn.addEventListener('click', startTimer);
         resetBtn.addEventListener('click', resetTimer);
