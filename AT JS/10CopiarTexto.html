@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserir Texto</title>
+</head>
+<body>
+    <center>
+        <h1>Insira um texto:</h1>
+        <input type="text" id="texto" placeholder="Digite seu texto aqui">
+        <button onclick="copiarTexto()">Copiar Texto</button>
+    </center>
+
+    <div id="listagem">
+    </div>
+
+    <script>
+        function copiarTexto() {
+            let texto = document.getElementById('texto').value;
+            if (texto.trim() !== "") {
+                let novoParagrafo = document.createElement('p');
+                novoParagrafo.textContent = texto;
+                document.getElementById('listagem').appendChild(novoParagrafo);
+                document.getElementById('texto').value = "";
+            }
+        }
+    </script>
+</body>
+</html>

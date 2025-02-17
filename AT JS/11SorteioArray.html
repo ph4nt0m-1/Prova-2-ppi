@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio de Número</title>
+</head>
+<body>
+    <center>
+        <button onclick="sortearNumero()">Gerar número aleatório</button>
+        <h2 id="resultado">?</h2>
+        <h3>Números Sorteados:</h3>
+        <ul id="listaNumeros"></ul>
+    </center>
+    
+    <script>
+        let numerosSorteados = [];
+
+        function sortearNumero() {
+            let numero = Math.floor(Math.random() * 101);
+            document.getElementById("resultado").textContent = numero;
+
+            numerosSorteados.push(numero);
+            atualizarLista();
+        }
+
+        function atualizarLista() {
+            let lista = document.getElementById("listaNumeros");
+            lista.innerHTML = "";
+
+            numerosSorteados.forEach(function(numero) {
+                let item = document.createElement("li");
+                item.textContent = numero;
+                lista.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>

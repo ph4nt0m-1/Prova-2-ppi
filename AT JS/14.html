@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomize Cores</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(5, 100px);
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box" id="box1">05668D</div>
+        <div class="box" id="box2">427AA1</div>
+        <div class="box" id="box3">EBF2FA</div>
+        <div class="box" id="box4">679436</div>
+        <div class="box" id="box5">A5BE00</div>
+    </div>
+
+    <script>
+        function pegarCorAleatoria() {
+            const caracteres = '0123456789ABCDEF';
+            let cor = '#';
+            for (let i = 0; i < 6; i++) {
+                cor += caracteres[Math.floor(Math.random() * 16)];
+            }
+            return cor;
+        }
+
+        function CorAleatoria() {
+            const boxes = document.querySelectorAll('.box');
+            boxes.forEach(box => {
+                const randomColor = pegarCorAleatoria();
+                box.style.backgroundColor = randomColor;
+                box.textContent = randomColor.toUpperCase();
+            });
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                CorAleatoria();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio de Número</title>
+</head>
+<body>
+
+    <center>
+        <input type="number" id="min" placeholder="Mínimo">
+        <br>
+        <input type="number" id="max" placeholder="Máximo">
+        <br>
+        <button onclick="sortearNumero()">Sortear</button>
+    
+        <p id="resultado"></p>
+    </center>
+
+    <script>
+        function sortearNumero() {
+    let min = parseInt(document.getElementById("min").value);
+    let max = parseInt(document.getElementById("max").value);
+
+    let menor = Math.min(min, max);
+    let maior = Math.max(min, max);
+
+    let numeroSorteado = Math.floor(Math.random() * (maior - menor + 1)) + menor;
+
+    document.getElementById("resultado").innerText = `Número sorteado: ${numeroSorteado}`;
+}
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Cliques</title>
+</head>
+<body>
+<center>
+    <div>
+        <h3 id="n_contador">0</h3>
+    </div>
+
+    <div>
+        <button onclick="Click()">Click Me</button>
+        <button onclick="reset()">Reset</button>
+    </div>
+</center>
+<script>
+    var contador = 0;
+
+    function Click() {
+        contador++;
+        updateDisplay(contador);
+        console.log("Contagem atual: " + contador);
+    }
+
+    function reset() {
+        contador = 0;
+        updateDisplay(contador);
+        console.log("Contador resetado para: " + contador);
+    }
+
+    function updateDisplay(val) {
+        document.getElementById('n_contador').innerHTML = val;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculadora {
+            width: 200px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        #Display {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            text-align: right;
+            padding: 5px;
+            font-size: 18px;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculadora">
+        <input type="text" id="Display" disabled>
+        <div class="botoes">
+            <button onclick="limparDisplay()">AC</button>
+            <button onclick="adicionarAoDisplay('/')">÷</button>
+            <button onclick="adicionarAoDisplay('*')">x</button>
+            <button onclick="adicionarAoDisplay('-')">-</button>
+            <button onclick="adicionarAoDisplay('7')">7</button>
+            <button onclick="adicionarAoDisplay('8')">8</button>
+            <button onclick="adicionarAoDisplay('9')">9</button>
+            <button onclick="adicionarAoDisplay('+')">+</button>
+            <button onclick="adicionarAoDisplay('4')">4</button>
+            <button onclick="adicionarAoDisplay('5')">5</button>
+            <button onclick="adicionarAoDisplay('6')">6</button>
+            <button onclick="calcularResultado()">=</button>
+            <button onclick="adicionarAoDisplay('1')">1</button>
+            <button onclick="adicionarAoDisplay('2')">2</button>
+            <button onclick="adicionarAoDisplay('3')">3</button>
+            <button onclick="adicionarAoDisplay('0')">0</button>
+            <button onclick="adicionarAoDisplay('.')">.</button>
+        </div>
+    </div>
+    <script>
+        function adicionarAoDisplay(valor) {
+            document.getElementById('Display').value += valor;
+        }
+
+        function limparDisplay() {
+            document.getElementById('Display').value = '';
+        }
+
+        function calcularResultado() {
+            try {
+                const resultado = eval(document.getElementById('Display').value);
+                document.getElementById('Display').value = resultado;
+            } catch (erro) {
+                document.getElementById('Display').value = 'Erro';
+            }
+        }
+    </script>
+</body>
+</html>

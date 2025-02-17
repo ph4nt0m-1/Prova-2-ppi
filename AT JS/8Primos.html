@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Números Primos</title>
+</head>
+<body>
+    <center>
+        <h2>Encontre Números Primos</h2>
+        <label for="inicio">Início:</label>
+        <br>
+        <input type="number" id="inicio" placeholder="Digite o início do intervalo">
+        <br>
+        <label for="fim">Fim:</label>
+        <br>
+        <input type="number" id="fim" placeholder="Digite o fim do intervalo">
+        <br>
+        <button onclick="encontrarPrimos()">Buscar</button>
+        <br>
+        <div id="resultado"></div>
+    </center>
+
+    <script>
+        function SaoPrimos(num) {
+            if (num < 2) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function encontrarPrimos() {
+            let inicio = parseInt(document.getElementById('inicio').value);
+            let fim = parseInt(document.getElementById('fim').value);
+            let primos = [];
+
+            for (let i = inicio; i <= fim; i++) {
+                if (SaoPrimos(i)) {
+                    primos.push(i);
+                }
+            }
+
+            document.getElementById('resultado').innerHTML = primos.length ? 
+                "Números primos encontrados: " + primos.join(", ") : "Nenhum número primo encontrado.";
+        }
+    </script>
+</body>
+</html>

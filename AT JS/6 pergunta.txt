@@ -1,0 +1,1 @@
+porque o script no segundo código esta sendo executado dentro da seção "<head>" antes da "<div id="output">" ser carregada no documento

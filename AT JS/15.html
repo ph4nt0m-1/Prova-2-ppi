@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teclas Pressionadas</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        .tecla-display {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+        .tecla {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pressione uma tecla</h2>
+        <div class="tecla-display" id="teclaDisplay"></div>
+    </div>
+
+    <script>
+        document.addEventListener("keydown", function(event) {
+            const teclaDisplay = document.getElementById("teclaDisplay");
+            const ElementTecla = document.createElement("div");
+            ElementTecla.classList.add("tecla");
+            ElementTecla.textContent = event.key;
+            teclaDisplay.appendChild(ElementTecla);
+        });
+    </script>
+</body>
+</html>
